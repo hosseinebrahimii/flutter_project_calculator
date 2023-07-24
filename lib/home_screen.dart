@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'package:flutter_project_calculator/colors.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: CustomColors.backgroundGrey,
         body: _getBody(),
       ),
     );
@@ -33,14 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             flex: 3,
             child: Container(
-              color: backgroundGreyDark,
+              color: CustomColors.backgroundGreyDark,
               child: calculatorScreenWidget(),
             ),
           ),
           Expanded(
             flex: 7,
             child: Container(
-              color: backgroundGrey,
+              color: CustomColors.backgroundGrey,
               child: numbersWidget(),
             ),
           ),
@@ -100,17 +101,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Color backgroundColorChecker(String name) {
     var operatorsList = ['ac', 'ce', '%', '/', '*', '-', '+', '='];
     for (var item in operatorsList) {
-      if (item == name) return backgroundGreyDark;
+      if (item == name) return CustomColors.backgroundGreyDark;
     }
-    return backgroundGrey;
+    return CustomColors.backgroundGrey;
   }
 
   Color foregroundColorChecker(String name) {
     var operatorsList = ['ac', 'ce', '%', '/', '*', '-', '+', '='];
     for (var item in operatorsList) {
-      if (item == name) return textGreen;
+      if (item == name) return CustomColors.textGreen;
     }
-    return textGrey;
+    return CustomColors.textGrey;
   }
 //----------------------------------------------------
 
@@ -126,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 '>',
                 style: TextStyle(
-                  color: textGreen,
+                  color: CustomColors.textGreen,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -137,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 displayText,
                 style: TextStyle(
-                  color: textGreen,
+                  color: CustomColors.textGreen,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -150,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             result,
             style: TextStyle(
-              color: textGrey,
+              color: CustomColors.textGrey,
               fontSize: 40,
               fontWeight: FontWeight.bold,
             ),
