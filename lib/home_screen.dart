@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 // ---------------------Project states:
 String displayText = '';
 var result = '';
+
 //----------------------
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -20,36 +21,31 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: CustomColors.backgroundGrey,
-        body: _getBody(),
+        backgroundColor: CustomColors.backgroundColor,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Container(
+                  color: CustomColors.backgroundColor,
+                  padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+                  child: calculatorScreenWidget(),
+                ),
+              ),
+              Expanded(
+                flex: 6,
+                child: Container(
+                  color: CustomColors.backgroundColor,
+                  child: numbersWidget(),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
-
-// Custom widgets and functions: ---------------------body:
-  Widget _getBody() {
-    return SafeArea(
-      child: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              color: CustomColors.backgroundGreyDark,
-              child: calculatorScreenWidget(),
-            ),
-          ),
-          Expanded(
-            flex: 7,
-            child: Container(
-              color: CustomColors.backgroundGrey,
-              child: numbersWidget(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-//----------------------------------------------------
 
 // Custom widgets and functions: ---------------------Calculator Buttons:
   Widget numbersWidget() {
@@ -99,19 +95,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Color backgroundColorChecker(String name) {
-    var operatorsList = ['ac', 'ce', '%', '/', '*', '-', '+', '='];
+    var operatorsList = ['%', '/', '*', '-', '+', '='];
     for (var item in operatorsList) {
-      if (item == name) return CustomColors.backgroundGreyDark;
+      if (item == name) return CustomColors.operationButtonsColor;
+      if (name == ' ac ' || name == ' ce ') return CustomColors.cleanButtonsColor;
     }
-    return CustomColors.backgroundGrey;
+    return CustomColors.backgroundColor;
   }
 
   Color foregroundColorChecker(String name) {
-    var operatorsList = ['ac', 'ce', '%', '/', '*', '-', '+', '='];
+    var operatorsList = ['%', '/', '*', '-', '+', '='];
     for (var item in operatorsList) {
-      if (item == name) return CustomColors.textGreen;
+      if (item == name) return CustomColors.operationColor;
     }
-    return CustomColors.textGrey;
+    return CustomColors.numbersColor;
   }
 //----------------------------------------------------
 
@@ -127,9 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 '>',
                 style: TextStyle(
-                  color: CustomColors.textGreen,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+                  color: CustomColors.screenNumbersColor,
+                  fontSize: 26,
                 ),
               ),
               const SizedBox(
@@ -138,23 +134,23 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 displayText,
                 style: TextStyle(
-                  color: CustomColors.textGreen,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+                  color: CustomColors.screenNumbersColor,
+                  fontSize: 22,
                 ),
               ),
             ],
           ),
         ),
+        const Spacer(),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             result,
             style: TextStyle(
-              color: CustomColors.textGrey,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
+              color: CustomColors.resultColor,
+              fontSize: 30,
             ),
+            textAlign: TextAlign.end,
           ),
         ),
       ],
