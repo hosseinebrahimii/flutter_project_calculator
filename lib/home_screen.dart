@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: ' / ',
                 child: Image.asset(
                   'images/divide.png',
-                  width: 17,
+                  width: 19,
                   color: CustomColors.operationColor,
                 ),
               ),
