@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var operatorsList = ['%', '/', '*', '-', '+', '='];
     for (var item in operatorsList) {
       if (item == name) return CustomColors.operationButtonsColor;
-      if (name == ' ac ' || name == ' ce ') return CustomColors.cleanButtonsColor;
+      if (name == 'ac' || name == 'ce') return CustomColors.cleanButtonsColor;
     }
     return CustomColors.backgroundColor;
   }
