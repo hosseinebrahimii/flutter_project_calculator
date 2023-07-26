@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 flex: 6,
                 child: Container(
                   color: CustomColors.backgroundColor,
-                  child: numbersWidget(),
+                  child: caculatorButtonsWidget(),
                 ),
               ),
             ],
@@ -47,72 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// Custom widgets and functions: ---------------------Calculator Buttons:
-  Widget numbersWidget() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _numbers('ac', 'ce', '%', '/'),
-        _numbers('7', '8', '9', '*'),
-        _numbers('4', '5', '6', '-'),
-        _numbers('1', '2', '3', '+'),
-        _numbers('000', '0', '.', '='),
-      ],
-    );
-  }
-
-  Widget _numbers(String name1, String name2, String name3, String name4) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _number(name1),
-        _number(name2),
-        _number(name3),
-        _number(name4),
-      ],
-    );
-  }
-
-  Widget _number(String text) {
-    return TextButton(
-      onPressed: () {
-        setState(() {
-          calculatorActions(text);
-        });
-      },
-      style: TextButton.styleFrom(
-        minimumSize: const Size.fromRadius(40),
-        backgroundColor: backgroundColorChecker(text),
-        shape: const CircleBorder(),
-        foregroundColor: foregroundColorChecker(text),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Color backgroundColorChecker(String name) {
-    var operatorsList = ['%', '/', '*', '-', '+', '='];
-    for (var item in operatorsList) {
-      if (item == name) return CustomColors.operationButtonsColor;
-      if (name == 'ac' || name == 'ce') return CustomColors.cleanButtonsColor;
-    }
-    return CustomColors.backgroundColor;
-  }
-
-  Color foregroundColorChecker(String name) {
-    var operatorsList = ['%', '/', '*', '-', '+', '='];
-    for (var item in operatorsList) {
-      if (item == name) return CustomColors.operationColor;
-    }
-    return CustomColors.numbersColor;
-  }
-//----------------------------------------------------
-
-// Custom widgets and functions: ---------------------Calculator Screen:
+//  Calculator Screen:
   Widget calculatorScreenWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,12 +93,190 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 //----------------------------------------------------
 
-  // Custom widgets and functions: ---------------------Calculator Logic:
+//  Calculator Buttons:
+  Widget caculatorButtonsWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          //first row:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _calculatorButton(
+                backgroundColor: CustomColors.cleanButtonsColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: 'AC',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.cleanButtonsColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: 'CE',
+                icon: Icons.backspace_outlined,
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: ' % ',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: ' ÷ ',
+              ),
+            ],
+          ),
+          //second row:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '7',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '8',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '9',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: ' X ',
+              ),
+            ],
+          ),
+          //third row:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '4',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '5',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '6',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: ' + ',
+                icon: Icons.add,
+              ),
+            ],
+          ),
+          //forth row:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '1',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '2',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '3',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: ' - ',
+                icon: Icons.remove,
+              ),
+            ],
+          ),
+          //fifth row:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '000',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '0',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.backgroundColor,
+                foregroundColor: CustomColors.numbersColor,
+                text: '.',
+              ),
+              _calculatorButton(
+                backgroundColor: CustomColors.operationButtonsColor,
+                foregroundColor: CustomColors.operationColor,
+                text: '=',
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _calculatorButton({
+    required String text,
+    IconData? icon,
+    required Color backgroundColor,
+    required Color foregroundColor,
+  }) {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          calculatorActions(text);
+        });
+      },
+      style: TextButton.styleFrom(
+        minimumSize: const Size.fromRadius(36),
+        backgroundColor: backgroundColor,
+        shape: const CircleBorder(),
+        foregroundColor: foregroundColor,
+      ),
+      child: (icon != null)
+          ? Icon(
+              icon,
+              color: foregroundColor,
+              size: 30,
+            )
+          : Text(
+              text,
+              style: const TextStyle(fontSize: 26),
+            ),
+    );
+  }
+
+//----------------------------------------------------
+
+//  Calculator Logic:
   void calculatorActions(String text) {
-    if (text == 'ac') {
+    if (text == 'AC') {
       displayText = '';
       result = '';
-    } else if (text == 'ce' && displayText.length > 1) {
+    } else if (text == 'CE' && displayText.isNotEmpty) {
       displayText = displayText.substring(0, displayText.length - 1);
     } else if (text == '=') {
       //these codes were added from math_expressions library
