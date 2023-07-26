@@ -25,6 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(
           child: Column(
             children: [
+              const SizedBox(
+                height: 30,
+              ),
               Expanded(
                 flex: 4,
                 child: Container(
@@ -39,6 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: CustomColors.backgroundColor,
                   child: caculatorButtonsWidget(),
                 ),
+              ),
+              const SizedBox(
+                height: 30,
               ),
             ],
           ),
@@ -83,7 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
             result,
             style: TextStyle(
               color: CustomColors.resultColor,
-              fontSize: 30,
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.end,
           ),
@@ -96,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //  Calculator Buttons:
   Widget caculatorButtonsWidget() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -113,17 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: CustomColors.cleanButtonsColor,
                 foregroundColor: CustomColors.numbersColor,
                 text: 'CE',
-                icon: Icons.backspace_outlined,
+                child: Icon(
+                  Icons.backspace_outlined,
+                  color: CustomColors.numbersColor,
+                  size: 30,
+                ),
               ),
               _calculatorButton(
                 backgroundColor: CustomColors.operationButtonsColor,
                 foregroundColor: CustomColors.operationColor,
                 text: ' % ',
+                child: Image.asset(
+                  'images/percent.png',
+                  width: 17,
+                  color: CustomColors.operationColor,
+                ),
               ),
               _calculatorButton(
                 backgroundColor: CustomColors.operationButtonsColor,
                 foregroundColor: CustomColors.operationColor,
-                text: ' ÷ ',
+                text: ' / ',
+                child: Image.asset(
+                  'images/divide.png',
+                  width: 17,
+                  color: CustomColors.operationColor,
+                ),
               ),
             ],
           ),
@@ -149,7 +170,12 @@ class _HomeScreenState extends State<HomeScreen> {
               _calculatorButton(
                 backgroundColor: CustomColors.operationButtonsColor,
                 foregroundColor: CustomColors.operationColor,
-                text: ' X ',
+                text: ' * ',
+                child: Image.asset(
+                  'images/multiply.png',
+                  width: 17,
+                  color: CustomColors.operationColor,
+                ),
               ),
             ],
           ),
@@ -176,7 +202,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: CustomColors.operationButtonsColor,
                 foregroundColor: CustomColors.operationColor,
                 text: ' + ',
-                icon: Icons.add,
+                child: Icon(
+                  Icons.add,
+                  color: CustomColors.operationColor,
+                  size: 30,
+                ),
               ),
             ],
           ),
@@ -200,11 +230,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 text: '3',
               ),
               _calculatorButton(
-                backgroundColor: CustomColors.operationButtonsColor,
-                foregroundColor: CustomColors.operationColor,
-                text: ' - ',
-                icon: Icons.remove,
-              ),
+                  backgroundColor: CustomColors.operationButtonsColor,
+                  foregroundColor: CustomColors.operationColor,
+                  text: ' - ',
+                  child: Icon(
+                    Icons.remove,
+                    color: CustomColors.operationColor,
+                    size: 30,
+                  )),
             ],
           ),
           //fifth row:
@@ -230,6 +263,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: CustomColors.operationButtonsColor,
                 foregroundColor: CustomColors.operationColor,
                 text: '=',
+                child: Image.asset(
+                  'images/equal.png',
+                  width: 19,
+                  color: CustomColors.operationColor,
+                ),
               ),
             ],
           ),
@@ -240,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _calculatorButton({
     required String text,
-    IconData? icon,
+    Widget? child,
     required Color backgroundColor,
     required Color foregroundColor,
   }) {
@@ -251,20 +289,19 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       },
       style: TextButton.styleFrom(
-        minimumSize: const Size.fromRadius(36),
+        minimumSize: const Size.fromRadius(40),
         backgroundColor: backgroundColor,
         shape: const CircleBorder(),
         foregroundColor: foregroundColor,
       ),
-      child: (icon != null)
-          ? Icon(
-              icon,
-              color: foregroundColor,
-              size: 30,
-            )
+      child: (child != null)
+          ? child
           : Text(
               text,
-              style: const TextStyle(fontSize: 26),
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w400,
+              ),
             ),
     );
   }
@@ -278,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
       result = '';
     } else if (text == 'CE' && displayText.isNotEmpty) {
       displayText = displayText.substring(0, displayText.length - 1);
-    } else if (text == '=') {
+    } else if (text == '=' && displayText.isNotEmpty) {
       //these codes were added from math_expressions library
       //and this is how it works to evaluate the equations.
       Parser p = Parser();
