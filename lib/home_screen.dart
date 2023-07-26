@@ -12,7 +12,9 @@ class HomeScreen extends StatefulWidget {
 // ---------------------Project states:
 String displayText = '';
 var result = '';
-
+int iterationOfUse = 0;
+List<String> displayTextMemory = [];
+List<String> resultMemory = [];
 //----------------------
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -310,21 +312,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
 //  Calculator Logic:
   void calculatorActions(String text) {
-    if (text == 'AC') {
-      displayText = '';
-      result = '';
-    } else if (text == 'CE' && displayText.isNotEmpty) {
-      displayText = displayText.substring(0, displayText.length - 1);
-    } else if (text == '=' && displayText.isNotEmpty) {
-      //these codes were added from math_expressions library
-      //and this is how it works to evaluate the equations.
-      Parser p = Parser();
-      Expression exp = p.parse(displayText);
-      ContextModel contextModel = ContextModel();
-      double answer = exp.evaluate(EvaluationType.REAL, contextModel);
-      result = answer.toString();
-    } else {
-      displayText = displayText + text;
+    try {
+      if (text == 'AC') {
+        displayText = '';
+        result = '';
+      } else if (text == 'CE' && displayText.isNotEmpty) {
+        displayText = displayText.substring(0, displayText.length - 1);
+      } else if ((text == 'CE' && displayText == '') || (text == '=' && displayText == '')) {
+        displayText = '';
+      } else if (text == '=' && displayText.isNotEmpty) {
+        //these codes were added from math_expressions library
+        //and this is how it works to evaluate the equations.
+        Parser p = Parser();
+        Expression exp = p.parse(displayText);
+        ContextModel contextModel = ContextModel();
+        double answer = exp.evaluate(EvaluationType.REAL, contextModel);
+        result = answer.toString();
+        iterationOfUse++;
+        displayTextMemory.add(displayText);
+        resultMemory.add(result);
+      } else {
+        displayText = displayText + text;
+      }
+    } catch (error) {
+      result = 'Error! please try again';
     }
   }
 //----------------------------------------------------
