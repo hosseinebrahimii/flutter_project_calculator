@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 // ---------------------Project states:
 String displayText = '';
 var result = '';
+bool theme = true;
 int iterationOfUse = 0;
 List<String> displayTextMemory = [];
 List<String> resultMemory = [];
@@ -27,14 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              const SizedBox(
-                height: 30,
-              ),
+              _themeButton(),
               Expanded(
                 flex: 4,
                 child: Container(
                   color: CustomColors.backgroundColor,
-                  padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
                   child: calculatorScreenWidget(),
                 ),
               ),
@@ -52,6 +51,32 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _themeButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextButton(
+            onPressed: () {
+              setState(
+                () {
+                  theme = !theme;
+                  CustomColors.darkMode(theme);
+                },
+              );
+            },
+            child: Icon(
+              Icons.light_mode_outlined,
+              size: 25,
+              color: CustomColors.numbersColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
