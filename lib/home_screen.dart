@@ -11,11 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 // ---------------------Project states:
-String _displayText = '';
-var _result = '';
 late SharedPreferences _prefs;
 bool _themeStateChanger = true;
 CustomColors appTheme = CustomColors();
+String _displayText = '';
+var _result = '';
 int _iterationOfUse = 0;
 List<String> _displayTextMemory = [];
 List<String> _resultMemory = [];
@@ -344,6 +344,9 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           calculatorActions(text);
         });
+        if (text == '=' && !_result.contains('Error')) {
+          _displayText = _result;
+        }
       },
       style: TextButton.styleFrom(
         minimumSize: const Size.fromRadius(40),
@@ -362,7 +365,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
     );
   }
-
 //----------------------------------------------------
 
 //  Calculator Logic:
@@ -371,11 +373,17 @@ class _HomeScreenState extends State<HomeScreen> {
       if (text == 'AC') {
         _displayText = '';
         _result = '';
-      } else if (text == 'CE' && _displayText.isNotEmpty) {
+      }
+      //
+      else if (text == 'CE' && _displayText.isNotEmpty) {
         _displayText = _displayText.substring(0, _displayText.length - 1);
-      } else if ((text == 'CE' && _displayText == '') || (text == '=' && _displayText == '')) {
+      }
+      //
+      else if ((text == 'CE' && _displayText == '') || (text == '=' && _displayText == '')) {
         _displayText = '';
-      } else if (text == '=' && _displayText.isNotEmpty) {
+      }
+      //
+      else if (text == '=' && _displayText.isNotEmpty) {
         //these codes were added from math_expressions library
         //and this is how it works to evaluate the equations.
         Parser p = Parser();
@@ -386,11 +394,13 @@ class _HomeScreenState extends State<HomeScreen> {
         _iterationOfUse = _iterationOfUse + 1;
         _displayTextMemory.add(_displayText);
         _resultMemory.add(_result);
-      } else {
+      }
+      //
+      else {
         _displayText = _displayText + text;
       }
     } catch (error) {
-      _result = 'Error! please try again';
+      _result = 'Error! try again';
     }
   }
 //----------------------------------------------------
