@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: _appTheme.backgroundColor,
           appBar: _getAppBar(),
           body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             children: [
               _getCalculatorTabView(),
               _getHistoryTabView(),
@@ -55,7 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
       preferredSize: const Size(double.infinity, 200),
       child: TabBar(
         indicatorColor: Colors.transparent,
+        splashBorderRadius: const BorderRadius.all(
+          Radius.circular(20),
+        ),
         padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+        splashFactory: NoSplash.splashFactory,
         onTap: (int tabNumber) {
           if (tabNumber == 0) {
             setState(() {
