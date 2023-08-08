@@ -13,7 +13,9 @@ class HomeScreen extends StatefulWidget {
 // ---------------------Project states:
 late SharedPreferences _prefs;
 bool _themeStateChanger = true;
-CustomColors appTheme = CustomColors();
+CustomColors _appTheme = CustomColors();
+bool _tab1Situation = true;
+bool _tab2Situation = false;
 String _displayText = '';
 var _result = '';
 int _iterationOfUse = 0;
@@ -30,37 +32,119 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appTheme.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _themeButton(),
-            Expanded(
-              flex: 4,
-              child: Container(
-                color: appTheme.backgroundColor,
-                padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
-                child: calculatorScreenWidget(),
-              ),
-            ),
-            Expanded(
-              flex: 6,
-              child: Container(
-                color: appTheme.backgroundColor,
-                child: caculatorButtonsWidget(),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          backgroundColor: _appTheme.backgroundColor,
+          appBar: _getAppBar(),
+          body: TabBarView(
+            children: [
+              _getCalculatorTabView(),
+              _getHistoryTabView(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-// saving and loading theme with shared preferences package:
+//  TabBar and its TabViews:
+  PreferredSizeWidget _getAppBar() {
+    return PreferredSize(
+      preferredSize: const Size(double.infinity, 200),
+      child: TabBar(
+        indicatorColor: Colors.transparent,
+        padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+        onTap: (int tabNumber) {
+          if (tabNumber == 0) {
+            setState(() {
+              _tab1Situation = true;
+              _tab2Situation = false;
+            });
+          } else {
+            setState(() {
+              _tab1Situation = false;
+              _tab2Situation = true;
+            });
+          }
+        },
+        tabs: [
+          Tab(
+            child: Container(
+              height: 40,
+              width: 150,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: (_tab1Situation) ? _appTheme.activeTabButtonColor : _appTheme.inactiveTabButtonColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Calculator',
+                style: TextStyle(
+                  color: (_tab1Situation) ? _appTheme.activeTabColor : _appTheme.inactiveTabColor,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+          Tab(
+            child: Container(
+              height: 40,
+              width: 150,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: (_tab2Situation) ? _appTheme.activeTabButtonColor : _appTheme.inactiveTabButtonColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'History',
+                style: TextStyle(
+                  color: (_tab2Situation) ? _appTheme.activeTabColor : _appTheme.inactiveTabColor,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getCalculatorTabView() {
+    return Column(
+      children: [
+        _themeButton(),
+        Expanded(
+          flex: 4,
+          child: Container(
+            color: _appTheme.backgroundColor,
+            padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+            child: calculatorScreenWidget(),
+          ),
+        ),
+        Expanded(
+          flex: 6,
+          child: Container(
+            color: _appTheme.backgroundColor,
+            child: caculatorButtonsWidget(),
+          ),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+      ],
+    );
+  }
+
+  Widget _getHistoryTabView() {
+    return Container(
+      color: Colors.red,
+    );
+  }
+//----------------------------------------------------
+
+//  saving and loading theme with shared preferences package:
   Future<bool> getTheme() async {
     _prefs = await SharedPreferences.getInstance();
     return _prefs.getBool('theme') ?? true;
@@ -71,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var theme = await getTheme();
     setState(
       () {
-        appTheme = CustomColors.themeSelector(theme);
+        _appTheme = CustomColors.themeSelector(theme);
       },
     );
   }
@@ -102,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Icon(
               Icons.light_mode_outlined,
               size: 25,
-              color: appTheme.numbersColor,
+              color: _appTheme.numbersColor,
             ),
           ),
         ),
@@ -122,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 '>',
                 style: TextStyle(
-                  color: appTheme.screenNumbersColor,
+                  color: _appTheme.screenNumbersColor,
                   fontSize: 26,
                 ),
               ),
@@ -132,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 _displayText,
                 style: TextStyle(
-                  color: appTheme.screenNumbersColor,
+                  color: _appTheme.screenNumbersColor,
                   fontSize: 22,
                 ),
               ),
@@ -145,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             _result,
             style: TextStyle(
-              color: appTheme.resultColor,
+              color: _appTheme.resultColor,
               fontSize: 36,
               fontWeight: FontWeight.bold,
             ),
@@ -169,38 +253,38 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _calculatorButton(
-                backgroundColor: appTheme.cleanButtonsColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.cleanButtonsColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: 'AC',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.cleanButtonsColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.cleanButtonsColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: 'CE',
                 child: Icon(
                   Icons.backspace_outlined,
-                  color: appTheme.numbersColor,
+                  color: _appTheme.numbersColor,
                   size: 30,
                 ),
               ),
               _calculatorButton(
-                backgroundColor: appTheme.operationButtonsColor,
-                foregroundColor: appTheme.operationColor,
+                backgroundColor: _appTheme.operationButtonsColor,
+                foregroundColor: _appTheme.operationColor,
                 text: ' % ',
                 child: Image.asset(
                   'images/percent.png',
                   width: 17,
-                  color: appTheme.operationColor,
+                  color: _appTheme.operationColor,
                 ),
               ),
               _calculatorButton(
-                backgroundColor: appTheme.operationButtonsColor,
-                foregroundColor: appTheme.operationColor,
+                backgroundColor: _appTheme.operationButtonsColor,
+                foregroundColor: _appTheme.operationColor,
                 text: ' / ',
                 child: Image.asset(
                   'images/divide.png',
                   width: 19,
-                  color: appTheme.operationColor,
+                  color: _appTheme.operationColor,
                 ),
               ),
             ],
@@ -210,28 +294,28 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '7',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '8',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '9',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.operationButtonsColor,
-                foregroundColor: appTheme.operationColor,
+                backgroundColor: _appTheme.operationButtonsColor,
+                foregroundColor: _appTheme.operationColor,
                 text: ' * ',
                 child: Image.asset(
                   'images/multiply.png',
                   width: 17,
-                  color: appTheme.operationColor,
+                  color: _appTheme.operationColor,
                 ),
               ),
             ],
@@ -241,27 +325,27 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '4',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '5',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '6',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.operationButtonsColor,
-                foregroundColor: appTheme.operationColor,
+                backgroundColor: _appTheme.operationButtonsColor,
+                foregroundColor: _appTheme.operationColor,
                 text: ' + ',
                 child: Icon(
                   Icons.add,
-                  color: appTheme.operationColor,
+                  color: _appTheme.operationColor,
                   size: 30,
                 ),
               ),
@@ -272,27 +356,27 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '1',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '2',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '3',
               ),
               _calculatorButton(
-                  backgroundColor: appTheme.operationButtonsColor,
-                  foregroundColor: appTheme.operationColor,
+                  backgroundColor: _appTheme.operationButtonsColor,
+                  foregroundColor: _appTheme.operationColor,
                   text: ' - ',
                   child: Icon(
                     Icons.remove,
-                    color: appTheme.operationColor,
+                    color: _appTheme.operationColor,
                     size: 30,
                   )),
             ],
@@ -302,28 +386,28 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '000',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '0',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.backgroundColor,
-                foregroundColor: appTheme.numbersColor,
+                backgroundColor: _appTheme.backgroundColor,
+                foregroundColor: _appTheme.numbersColor,
                 text: '.',
               ),
               _calculatorButton(
-                backgroundColor: appTheme.operationButtonsColor,
-                foregroundColor: appTheme.operationColor,
+                backgroundColor: _appTheme.operationButtonsColor,
+                foregroundColor: _appTheme.operationColor,
                 text: '=',
                 child: Image.asset(
                   'images/equal.png',
                   width: 19,
-                  color: appTheme.operationColor,
+                  color: _appTheme.operationColor,
                 ),
               ),
             ],
