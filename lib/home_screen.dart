@@ -18,7 +18,6 @@ bool _tab1Situation = true;
 bool _tab2Situation = false;
 String _displayText = '';
 var _result = '';
-int _iterationOfUse = 0;
 List<String> _displayTextMemory = [];
 List<String> _resultMemory = [];
 //----------------------
@@ -143,8 +142,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _getHistoryTabView() {
-    return Container(
-      color: Colors.red,
+    return Column(
+      children: [
+        _removeHistoryButton(),
+        Flexible(
+          child: ListView.builder(
+            itemCount: _displayTextMemory.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  _displayText = _displayTextMemory[index];
+                  _result = _resultMemory[index];
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Text(
+                    '${index + 1} : ${_displayTextMemory[index]} = ${_resultMemory[index]}',
+                    style: TextStyle(color: _appTheme.resultColor, fontSize: 22),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 //----------------------------------------------------
@@ -171,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 //----------------------------------------------------
 
+//  theme button for the calculator tab:
   Widget _themeButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -198,6 +221,33 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+//----------------------------------------------------
+
+//  remove history button for the history tab:
+  Widget _removeHistoryButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                _resultMemory.clear();
+                _displayTextMemory.clear();
+              });
+            },
+            child: Icon(
+              Icons.history,
+              size: 26,
+              color: _appTheme.numbersColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+//----------------------------------------------------
 
 //  Calculator Screen:
   Widget calculatorScreenWidget() {
@@ -480,7 +530,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ContextModel contextModel = ContextModel();
         double answer = exp.evaluate(EvaluationType.REAL, contextModel);
         _result = answer.toString();
-        _iterationOfUse = _iterationOfUse + 1;
         _displayTextMemory.add(_displayText);
         _resultMemory.add(_result);
       }
